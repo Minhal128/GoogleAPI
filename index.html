@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <title>Medical Data Entry Form</title>
+    <script src="https://sheetdb.io/s/f/21uqfsmuix84o.js"></script>
+  </head>
+  <body>
+    <section class="hero is-primary is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Data Entry Form</h1>
+          <p class="subtitle">Submit patient information securely</p>
+        </div>
+      </div>
+    </section>
+    
+    <div class="container m-4">
+      <div class="columns">
+        <div class="column is-8">
+          <div class="box">
+            <form id="form" method="POST" target="hiddenFrame">
+              <div class="field" style="display: none;">
+                <label class="label">Sheet ID</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    name="sheetId"
+                    value="1RJ0tM1tSdgxQr_OmTth4p_d3s9hA6Ms5pEV4m_4JhdU"
+                  />
+                </div>
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control">
+                  <script src="https://sheetdb.io/s/f/21uqfsmuix84o.js"></script>
+                </div>
+              </div>
+            </form>
+            <div class="field">
+              <div class="control">
+                <!-- <button id="loadButton" class="button is-primary">
+                  <span class="icon">F
+                    <i class="fas fa-download"></i>
+                  </span>
+                  <span>Load Data</span>
+                </button> -->
+              </div>
+            </div>
+
+            <iframe name="hiddenFrame" style="display:none;"></iframe>
+            
+            <div
+              id="message"
+              style="
+                display: none;
+                margin-top: 20px;
+                font-weight: bold;
+                padding: 12px;
+                border-radius: 4px;
+              "
+            ></div>
+          </div>
+        </div>
+        
+        <div class="column is-4">
+          <div class="box">
+            <h3 class="subtitle is-5">Manage Your Data</h3>
+            <div class="buttons">
+              <a href="https://docs.google.com/spreadsheets/d/1RJ0tM1tSdgxQr_OmTth4p_d3s9hA6Ms5pEV4m_4JhdU/edit" 
+                target="_blank" 
+                class="button is-info is-fullwidth">
+                <span class="icon">
+                  <i class="fas fa-table"></i>
+                </span>
+                <span>View Google Spreadsheet</span>
+              </a>
+              <!-- <button id="viewData" class="button is-success is-fullwidth">
+                <span class="icon">
+                  <i class="fas fa-sync"></i>
+                </span>
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- <div class="box mt-4">
+        <h2 class="title is-4">Submitted Entries</h2>
+        <div id="dataViewer" class="mt-3">
+          <table class="table is-striped is-fullwidth is-hoverable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div> -->
+      
+    </div>
+    
+    <!-- Container where you want the recorder to live -->
+    <div class="box mt-4">
+      <h2 class="title is-4">Audio Recorder</h2>
+      <div class="audio-recorder-container">
+        <div class="columns">
+          <div class="column is-8">
+            <div class="field has-addons">
+              <p class="control">
+                <button id="recordButton" class="button is-primary">
+                  <span class="icon">
+                    <i class="fas fa-microphone"></i>
+                  </span>
+                  <span>Record</span>
+                </button>
+              </p>
+              <p class="control">
+                <button id="pauseButton" class="button" disabled>
+                  <span class="icon">
+                    <i class="fas fa-pause"></i>
+                  </span>
+                  <span>Pause</span>
+                </button>
+              </p>
+              <p class="control">
+                <button id="stopButton" class="button" disabled>
+                  <span class="icon">
+                    <i class="fas fa-stop"></i>
+                  </span>
+                  <span>Stop</span>
+                </button>
+              </p>
+              <p class="control">
+                <button id="deleteButton" class="button is-danger" disabled>
+                  <span class="icon">
+                    <i class="fas fa-trash"></i>
+                  </span>
+                  <span>Delete</span>
+                </button>
+              </p>
+            </div>
+            
+            <div id="recordingStatus" class="has-text-info mt-2 mb-2" style="display: none;">
+              Recording... <span id="recordingTime">00:00</span>
+            </div>
+            
+            <div id="streamingStatus" class="has-text-success mt-2 mb-2" style="display: none;">
+              <span class="icon">
+                <i class="fas fa-wifi"></i>
+              </span>
+              Streaming in real-time
+              <div class="is-pulled-right">
+                <div class="audio-visualizer">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+            </div>
+    
+            <div id="audioLevelMeter" class="mt-2" style="display: none;">
+              <progress class="progress is-primary" value="0" max="100"></progress>
+            </div>
+            
+            <div id="audioPlayer" class="mt-3" style="display: none;">
+              <audio id="audioPlayback" controls></audio>
+            </div>
+            
+            <div id="uploadStatus" class="mt-2" style="display: none;"></div>
+          </div>
+          
+          <div class="column is-4">
+            <button id="streamButton" class="button is-info is-fullwidth mb-3">
+              <span class="icon">
+                <i class="fas fa-broadcast-tower"></i>
+              </span>
+              <span>Enable Real-time Streaming</span>
+            </button>
+            <button id="uploadButton" class="button is-success is-fullwidth" disabled>
+              <span class="icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+              </span>
+              <span>Upload to Google Drive</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <style>
+        .audio-visualizer {
+          display: flex;
+          align-items: flex-end;
+          height: 20px;
+          gap: 3px;
+        }
+        .audio-visualizer .bar {
+          width: 5px;
+          background-color: #00d1b2;
+          height: 3px;
+          animation: sound 0ms -800ms linear infinite alternate;
+          border-radius: 2px;
+        }
+        .audio-visualizer .bar:nth-child(1) { animation-duration: 474ms; }
+        .audio-visualizer .bar:nth-child(2) { animation-duration: 433ms; }
+        .audio-visualizer .bar:nth-child(3) { animation-duration: 407ms; }
+        .audio-visualizer .bar:nth-child(4) { animation-duration: 458ms; }
+        .audio-visualizer .bar:nth-child(5) { animation-duration: 400ms; }
+        
+        @keyframes sound {
+          0% {
+            height: 3px;
+          }
+          100% {
+            height: 20px;
+          }
+        }
+      </style>
+    
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // Google Apps Script Upload URL
+          const UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbzPHMeJYawiTY67C0tMAFXT_YibZKKaLcuHW-CCZdwuhtD42kIH8n_367OrNnXTCVOvqg/exec';
+          
+          // Elements
+          const recordButton = document.getElementById('recordButton');
+          const pauseButton = document.getElementById('pauseButton');
+          const stopButton = document.getElementById('stopButton');
+          const deleteButton = document.getElementById('deleteButton');
+          const uploadButton = document.getElementById('uploadButton');
+          const streamButton = document.getElementById('streamButton');
+          const audioPlayback = document.getElementById('audioPlayback');
+          const audioPlayer = document.getElementById('audioPlayer');
+          const recordingStatus = document.getElementById('recordingStatus');
+          const streamingStatus = document.getElementById('streamingStatus');
+          const uploadStatus = document.getElementById('uploadStatus');
+          const recordingTime = document.getElementById('recordingTime');
+          const audioLevelMeter = document.getElementById('audioLevelMeter');
+          const audioLevelProgress = audioLevelMeter.querySelector('progress');
+          
+          // Recording variables
+          let mediaRecorder;
+          let audioContext;
+          let audioAnalyser;
+          let audioSource;
+          let audioChunks = [];
+          let audioBlob;
+          let audioUrl;
+          let startTime;
+          let timerInterval;
+          let levelInterval;
+          let isPaused = false;
+          let pausedTime = 0;
+          let isStreaming = false;
+          let streamingSocket;
+          
+          // Request microphone access and set up recorder
+          async function setupRecorder() {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              
+              // Set up the media recorder
+              mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+              
+              // Set up the Web Audio API for real-time analysis
+              audioContext = new (window.AudioContext || window.webkitAudioContext)();
+              audioSource = audioContext.createMediaStreamSource(stream);
+              audioAnalyser = audioContext.createAnalyser();
+              audioAnalyser.fftSize = 256;
+              audioSource.connect(audioAnalyser);
+              
+              // Set up media recorder events
+              mediaRecorder.addEventListener('dataavailable', event => {
+                if (event.data.size > 0) {
+                  audioChunks.push(event.data);
+                  
+                  // If streaming is enabled, stream this chunk
+                  if (isStreaming && streamingSocket && streamingSocket.readyState === WebSocket.OPEN) {
+                    streamingSocket.send(event.data);
+                  }
+                }
+              });
+              
+              mediaRecorder.addEventListener('stop', () => {
+                audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl;
+                audioPlayer.style.display = 'block';
+                deleteButton.disabled = false;
+                uploadButton.disabled = false;
+                
+                // Stop level monitoring
+                clearInterval(levelInterval);
+                audioLevelMeter.style.display = 'none';
+              });
+              
+              return true;
+            } catch (err) {
+              console.error('Error accessing microphone:', err);
+              alert('Could not access your microphone. Please check your permissions and try again.');
+              return false;
+            }
+          }
+          
+          // Set up streaming
+          function setupStreaming() {
+            const STREAMING_SERVER = 'wss://echo.websocket.org'; // Replace with your actual streaming server
+            
+            try {
+              streamingSocket = new WebSocket(STREAMING_SERVER);
+              
+              streamingSocket.onopen = () => {
+                isStreaming = true;
+                streamButton.innerHTML = `
+                  <span class="icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                  </span>
+                  <span>Streaming Enabled</span>
+                `;
+                streamButton.classList.remove('is-info');
+                streamButton.classList.add('is-success');
+                
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                  streamingStatus.style.display = 'block';
+                }
+              };
+              
+              streamingSocket.onclose = () => {
+                isStreaming = false;
+                streamButton.innerHTML = `
+                  <span class="icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                  </span>
+                  <span>Enable Real-time Streaming</span>
+                `;
+                streamButton.classList.remove('is-success');
+                streamButton.classList.add('is-info');
+                streamingStatus.style.display = 'none';
+              };
+              
+              streamingSocket.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+                alert('Error connecting to streaming server. Streaming disabled.');
+                isStreaming = false;
+                streamButton.innerHTML = `
+                  <span class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </span>
+                  <span>Streaming Failed</span>
+                `;
+                streamButton.classList.remove('is-success', 'is-info');
+                streamButton.classList.add('is-danger');
+                streamingStatus.style.display = 'none';
+              };
+              
+              streamingSocket.onmessage = (message) => {
+                // Handle any messages from the server
+                console.log('Server message:', message.data);
+              };
+            } catch (error) {
+              console.error('Error setting up WebSocket:', error);
+              alert('Could not setup streaming connection.');
+            }
+          }
+          
+          // Update audio level meter
+          function updateAudioLevel() {
+            if (!audioAnalyser) return;
+            
+            const dataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+            audioAnalyser.getByteFrequencyData(dataArray);
+            
+            // Calculate average level
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+              sum += dataArray[i];
+            }
+            const average = sum / dataArray.length;
+            
+            // Map to 0-100 range
+            const level = Math.min(100, Math.max(0, average * 1.5));
+            audioLevelProgress.value = level;
+            
+            // Adjust visualizer animation based on level
+            const visualizerBars = document.querySelectorAll('.audio-visualizer .bar');
+            visualizerBars.forEach(bar => {
+              const scale = 0.3 + (level / 100) * 0.7;
+              bar.style.animationPlayState = level < 10 ? 'paused' : 'running';
+            });
+          }
+          
+          // Timer functions
+          function startTimer() {
+            startTime = Date.now() - (isPaused ? pausedTime : 0);
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer(); // Update immediately
+          }
+          
+          function updateTimer() {
+            const elapsedTime = Date.now() - startTime;
+            const seconds = Math.floor((elapsedTime / 1000) % 60).toString().padStart(2, '0');
+            const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60).toString().padStart(2, '0');
+            recordingTime.textContent = `${minutes}:${seconds}`;
+          }
+          
+          function stopTimer() {
+            clearInterval(timerInterval);
+          }
+          
+          // Handle record button
+          recordButton.addEventListener('click', async function() {
+            // First time recording - set up recorder
+            if (!mediaRecorder) {
+              const setup = await setupRecorder();
+              if (!setup) return;
+            }
+            
+            // Start a new recording
+            audioChunks = [];
+            audioPlayer.style.display = 'none';
+            recordingStatus.style.display = 'block';
+            audioLevelMeter.style.display = 'block';
+            uploadStatus.style.display = 'none';
+            
+            if (isPaused) {
+              // Resume recording
+              mediaRecorder.resume();
+              isPaused = false;
+              startTimer();
+              recordingStatus.classList.remove('has-text-warning');
+              recordingStatus.textContent = 'Recording... ';
+              recordingStatus.appendChild(recordingTime);
+            } else {
+              // Start fresh recording
+              mediaRecorder.start(200); // Collect 200ms chunks for real-time streaming
+              startTimer();
+              
+              // Start monitoring audio levels
+              levelInterval = setInterval(updateAudioLevel, 100);
+              
+              // Show streaming status if streaming is enabled
+              if (isStreaming) {
+                streamingStatus.style.display = 'block';
+              }
+            }
+            
+            // Update UI
+            recordButton.disabled = true;
+            pauseButton.disabled = false;
+            stopButton.disabled = false;
+            deleteButton.disabled = true;
+            uploadButton.disabled = true;
+            recordButton.querySelector('span:not(.icon)').textContent = 'Recording...';
+            recordButton.classList.add('is-danger');
+          });
+          
+          // Handle pause button
+          pauseButton.addEventListener('click', function() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.pause();
+              isPaused = true;
+              pausedTime = Date.now() - startTime;
+              stopTimer();
+              
+              // Update UI
+              recordButton.disabled = false;
+              recordButton.querySelector('span:not(.icon)').textContent = 'Resume';
+              pauseButton.disabled = true;
+              recordingStatus.classList.add('has-text-warning');
+              recordingStatus.textContent = 'Paused ';
+              recordingStatus.appendChild(recordingTime);
+              streamingStatus.style.display = 'none';
+            }
+          });
+          
+          // Handle stop button
+          stopButton.addEventListener('click', function() {
+            if (mediaRecorder && (mediaRecorder.state === 'recording' || mediaRecorder.state === 'paused')) {
+              mediaRecorder.stop();
+              stopTimer();
+              recordingStatus.style.display = 'none';
+              streamingStatus.style.display = 'none';
+              
+              // Update UI
+              recordButton.disabled = false;
+              pauseButton.disabled = true;
+              stopButton.disabled = true;
+              recordButton.querySelector('span:not(.icon)').textContent = 'Record';
+              recordButton.classList.remove('is-danger');
+              recordingStatus.classList.remove('has-text-warning');
+            }
+          });
+          
+          // Handle delete button
+          deleteButton.addEventListener('click', function() {
+            if (audioUrl) {
+              URL.revokeObjectURL(audioUrl);
+              audioUrl = null;
+              audioBlob = null;
+              audioChunks = [];
+              audioPlayback.src = '';
+              audioPlayer.style.display = 'none';
+              uploadStatus.style.display = 'none';
+              deleteButton.disabled = true;
+              uploadButton.disabled = true;
+            }
+          });
+          
+          // Handle streaming toggle button
+          streamButton.addEventListener('click', function() {
+            if (!isStreaming) {
+              setupStreaming();
+            } else if (streamingSocket) {
+              streamingSocket.close();
+              isStreaming = false;
+            }
+          });
+          
+          // Handle upload button using Google Apps Script
+          uploadButton.addEventListener('click', function() {
+            if (!audioBlob) {
+              alert('No recording available to upload.');
+              return;
+            }
+            
+            // Disable upload button and show status
+            uploadButton.disabled = true;
+            uploadButton.classList.add('is-loading');
+            uploadStatus.style.display = 'block';
+            uploadStatus.className = 'notification is-light has-text-centered';
+            uploadStatus.textContent = 'Preparing upload...';
+            
+            // Use FileReader to convert blob to base64 data
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              try {
+                // Split the data URL to get base64 data
+                const [meta, data] = reader.result.split(',');
+                const mimetype = meta.match(/data:(.*);base64/)[1];
+                
+                // Create payload for Google Apps Script
+                const payload = new FormData();
+                payload.append('filename', `recording_${Date.now()}.webm`);
+                payload.append('mimetype', mimetype);
+                payload.append('file', data);
+                
+                // Update status
+                uploadStatus.textContent = 'Uploading to Google Drive...';
+                
+                // Send to Google Apps Script Web App
+                const res = await fetch(UPLOAD_URL, { method: 'POST', body: payload });
+                const json = await res.json();
+                
+                // Handle response
+                if (json.status === 'success') {
+                  uploadStatus.className = 'notification is-success has-text-centered';
+                  uploadStatus.innerHTML = `
+                    <p>Upload successful!</p>
+                    <a href="${json.url}" target="_blank" class="button is-small is-primary mt-2">
+                      <span class="icon is-small">
+                        <i class="fas fa-external-link-alt"></i>
+                      </span>
+                      <span>View in Google Drive</span>
+                    </a>
+                  `;
+                } else {
+                  throw new Error(json.message || 'Unknown error');
+                }
+              } catch (err) {
+                console.error('Upload failed:', err);
+                uploadStatus.className = 'notification is-danger has-text-centered';
+                uploadStatus.textContent = `Upload failed: ${err.message || 'Unknown error'}`;
+              } finally {
+                uploadButton.classList.remove('is-loading');
+                uploadButton.disabled = false;
+              }
+            };
+            
+            // Read the audio blob as Data URL
+            reader.readAsDataURL(audioBlob);
+          });
+        });
+      </script>
+    </div>
+
+
+
+<style>
+  /* You can move these rules into your site-wide CSS */
+  #audio-recorder-container button {
+    margin: 0.5em;
+    padding: 0.5em 1em;
+  }
+  #audio-recorder-container #status {
+    margin-top: 1em;
+    font-style: italic;
+  }
+</style>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+    
+  
+  </body>
+</html>
